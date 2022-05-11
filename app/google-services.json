@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "621837493665",
+    "project_id": "educasocial-1bbb1",
+    "storage_bucket": "educasocial-1bbb1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621837493665:android:b036c4b697bb054dec57e0",
+        "android_client_info": {
+          "package_name": "itr.ksj.appeducasocial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621837493665-bspe2k2tv3dqj8ca8tdaajcoaf65hg4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9fuUUg08-Uhdj-MKn8f7CH826Feqs8ZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621837493665-bspe2k2tv3dqj8ca8tdaajcoaf65hg4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
