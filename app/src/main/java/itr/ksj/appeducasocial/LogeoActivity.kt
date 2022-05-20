@@ -36,8 +36,6 @@ class LogeoActivity : AppCompatActivity() {
             val email = enlace.emailEditT.text.toString()
             val pass = enlace.passEditT.text.toString()
 
-            //ToDo
-            autentificador.languageCode
 
             autentificador.signInWithEmailAndPassword(email,pass)
                 .addOnSuccessListener {

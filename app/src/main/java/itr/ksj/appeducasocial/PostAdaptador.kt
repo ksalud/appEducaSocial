@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +40,7 @@ class PostAdaptador(private val activity:Activity,private val dataset: List<Post
         //dataset.sortedByDescending { it.date }
         val post = dataset[position]
 
-
+        var flag=10
         val likes = post.likes!!.toMutableList()
         var liked = likes.contains(autentificador.uid)
 
@@ -53,8 +54,32 @@ class PostAdaptador(private val activity:Activity,private val dataset: List<Post
 
         holder.layout.findViewById<TextView>(R.id.fecha_txtV).text=dateFormat.format(post.date)
 
+        if(post.post!!.length>50){
+            verMenos(holder, post)
+            //flag=1 y flag=2 es clickeable
+            flag=1
+            //holder.layout.findViewById<TextView>(R.id.btn_verMas).visibility=View.VISIBLE
+
+        }else{
+            flag=0
+        }
+
+
         //Cambiar el color del boton si estaa pulsado o no
         setColor(liked,holder.layout.findViewById(R.id.btnLike))
+
+        //Click texto para ver el texto en grande
+        holder.layout.findViewById<TextView>(R.id.textoPost_txtV).setOnClickListener {
+
+            if (flag==1){
+                verMas(holder, post)
+                flag=2
+            }else if(flag==2){
+                verMenos(holder, post)
+                flag=1
+            }
+        }
+
 
         holder.layout.findViewById<TextView>(R.id.nombreUsuario_txtV).setOnClickListener {
             val intent = Intent(activity, PerfilActivity::class.java)
@@ -115,6 +140,15 @@ class PostAdaptador(private val activity:Activity,private val dataset: List<Post
         if(liked) likeButton.setTextColor(ContextCompat.getColor(activity,R.color.teal_200))
         else likeButton.setTextColor(Color.BLACK)
     }
+    fun verMas(holder: ViewHolder,post:Post){
+        holder.layout.findViewById<TextView>(R.id.textoPost_txtV).text=post.post+"\n"+"[Ver menos]"
+    }
+
+    fun verMenos(holder: ViewHolder,post:Post){
+        val postCorto=post.post!!.substring(0,50)+"..."
+        holder.layout.findViewById<TextView>(R.id.textoPost_txtV).text=postCorto+"\n"+" [Ver más]"
+    }
+
 
 
 

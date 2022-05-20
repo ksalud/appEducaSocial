@@ -54,42 +54,51 @@ class RegistroActivity : AppCompatActivity() {
                 barraCarga.setMessage("Espere un momento mientras se valida todo.")
                 barraCarga.show()
                 barraCarga.setCanceledOnTouchOutside(true)
-                autentificador.createUserWithEmailAndPassword(email,pass)
-                    .addOnSuccessListener {
-                        val perfil = UserProfileChangeRequest.Builder()
-                            .setDisplayName(nombre)
-                            .build()
-
-                        it.user!!.updateProfile(perfil)
+                db.collection("Users").whereEqualTo("nombre",nombre).addSnapshotListener { value, error ->
+                    val users = value!!.toObjects(Users::class.java)
+                    if(!users.isNullOrEmpty()){
+                        Utils.alertaError(this,"Este nombre ya esta en uso...")
+                        barraCarga.dismiss()
+                    } else{
+                        autentificador.createUserWithEmailAndPassword(email,pass)
                             .addOnSuccessListener {
-                                val user = Users(FirebaseAuth.getInstance().uid,email,null,nombre,pass)
+                                val perfil = UserProfileChangeRequest.Builder()
+                                    .setDisplayName(nombre)
+                                    .build()
 
-                                db.collection("Users").add(user)
+                                it.user!!.updateProfile(perfil)
                                     .addOnSuccessListener {
-                                        barraCarga.dismiss()
-                                        AlertDialog.Builder(this).apply {
-                                            setTitle("Cuenta creada")
-                                            setMessage("Tu cuenta ha sido registrada correctamente")
-                                            setPositiveButton("Aceptar"){dialog:DialogInterface, _:Int ->
-                                                finish()
+                                        val user = Users(FirebaseAuth.getInstance().uid,email,null,nombre,pass)
+
+                                        db.collection("Users").add(user)
+                                            .addOnSuccessListener {
+                                                barraCarga.dismiss()
+                                                AlertDialog.Builder(this).apply {
+                                                    setTitle("Cuenta creada")
+                                                    setMessage("Tu cuenta ha sido registrada correctamente")
+                                                    setPositiveButton("Aceptar"){dialog:DialogInterface, _:Int ->
+                                                        finish()
+                                                    }
+                                                    //guardadoBBDDUser()
+                                                }.show()
                                             }
-                                            //guardadoBBDDUser()
-                                        }.show()
+                                            .addOnFailureListener {
+                                                Utils.alertaError(this,it.localizedMessage)
+                                            }
+
                                     }
                                     .addOnFailureListener {
-                                        Utils.alertaError(this,it.localizedMessage)
+                                        barraCarga.dismiss()
+                                        prepararTraductor(it.localizedMessage)
                                     }
-
                             }
                             .addOnFailureListener {
                                 barraCarga.dismiss()
                                 prepararTraductor(it.localizedMessage)
                             }
                     }
-                    .addOnFailureListener {
-                        barraCarga.dismiss()
-                        prepararTraductor(it.localizedMessage)
-                    }
+                }
+
             }
 
         }

@@ -5,6 +5,8 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         userProfileImageRef= FirebaseStorage.getInstance().reference.child("profile Images")
 
         navigationView = enlace.panellateral
-        //navigationView.=autentificador.currentUser!!.displayName
+
         val navView =  navigationView.inflateHeaderView(R.layout.navigation_header)
         navView.findViewById<TextView>(R.id.usuarioTxt).text=autentificador.currentUser!!.displayName
         imagenPerfil=navView.findViewById<CircleImageView>(R.id.imagenPerfil)

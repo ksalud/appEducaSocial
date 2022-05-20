@@ -13,6 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppEducaSocial">
         <activity
+            android:name=".PostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:label="@string/title_activity_splash"
+            android:theme="@style/Theme.AppEducaSocial.NoActionBar" />
+        <activity
             android:name=".PerfilActivity"
             android:exported="false" />
         <activity
