@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
-import android.util.Log
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +16,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -134,20 +135,28 @@ class PostAdaptador(private val activity:Activity,private val dataset: List<Post
                 return@setOnClickListener
             }
         }
-
+        if(!post.categorias.isNullOrEmpty() && post.categorias?.size!!>0) {
+            holder.layout.findViewById<TextView>(R.id.categorias_Txt).visibility=View.VISIBLE
+            for(categoria in post.categorias){
+                holder.layout.findViewById<TextView>(R.id.categorias_Txt)
+                    .setText(holder.layout.findViewById<TextView>(R.id.categorias_Txt).text as String +categoria+" ")
+            }
+        }
     }
     private fun setColor(liked:Boolean,likeButton:Button){
         if(liked) likeButton.setTextColor(ContextCompat.getColor(activity,R.color.teal_200))
         else likeButton.setTextColor(Color.BLACK)
     }
     fun verMas(holder: ViewHolder,post:Post){
-        holder.layout.findViewById<TextView>(R.id.textoPost_txtV).text=post.post+"\n"+"[Ver menos]"
+        holder.layout.findViewById<TextView>(R.id.textoPost_txtV).text=post.post+"\n"+" [Ver menos]"
     }
 
     fun verMenos(holder: ViewHolder,post:Post){
         val postCorto=post.post!!.substring(0,50)+"..."
         holder.layout.findViewById<TextView>(R.id.textoPost_txtV).text=postCorto+"\n"+" [Ver más]"
     }
+
+
 
 
 

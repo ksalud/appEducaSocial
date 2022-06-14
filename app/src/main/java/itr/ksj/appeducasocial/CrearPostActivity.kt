@@ -43,10 +43,17 @@ class CrearPostActivity : AppCompatActivity() {
             }
         }
         enlace.addCategoria.setOnClickListener {
-            if(!categoria.contains(enlace.editTextTextPersonName.text.toString())) {
-                categoria.add(enlace.editTextTextPersonName.text.toString())
+            if(categoria.size<3) {
+                if (!enlace.categoriaTxt.text.toString().equals("")) {
+                    if (!categoria.contains(enlace.categoriaTxt.text.toString())) {
+                        categoria.add(enlace.categoriaTxt.text.toString())
+                        enlace.categoriaTxt.setText("")
+                    }
+                    enlace.categoriasAdd.setText("Catergorias: " + categoria.toString())
+                }
+            }else{
+                Utils.alertaError(this,"No se permiten mas de 3 categorias",)
             }
-            enlace.categoriasAdd.setText("Catergorias: "+categoria.toString())
         }
     }
 }

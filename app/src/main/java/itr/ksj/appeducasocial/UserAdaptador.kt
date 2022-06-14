@@ -1,6 +1,7 @@
 package itr.ksj.appeducasocial
 
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,12 @@ class UserAdaptador(private val activity: Activity, private val dataset: List<Us
 
         Picasso.with(activity).load(user.imagenPerfil).placeholder(R.drawable.profile).into(holder.layout.findViewById<CircleImageView>(R.id.all_user_profile_imagen))
 
+
+        holder.layout.findViewById<TextView>(R.id.all_user_profile_nombre).setOnClickListener {
+            val intent = Intent(activity, PerfilActivity::class.java)
+            intent.putExtra("usuario", holder.layout.findViewById<TextView>(R.id.all_user_profile_nombre).text)
+            activity.startActivity(intent)
+        }
     }
     override fun getItemCount()=dataset.size
 }

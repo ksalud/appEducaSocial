@@ -123,12 +123,12 @@
                 card_view:srcCompat="@drawable/ic_baseline_delete_outline_24" />
 
             <TextView
-                android:id="@+id/btn_verMas"
+                android:id="@+id/categorias_Txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="Ver mas..."
+                android:text="Categorias: "
                 android:textColor="@color/purple_500"
                 android:textSize="12sp"
                 android:visibility="invisible"

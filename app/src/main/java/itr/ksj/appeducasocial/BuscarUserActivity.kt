@@ -47,7 +47,6 @@ class BuscarUserActivity : AppCompatActivity() {
             }
         }
         enlace.btnPrueba.setOnClickListener {
-            //Toast.makeText(this,"Pulsado",Toast.LENGTH_LONG)
             BuscarAmigos(enlace.buscarEt.text.toString())
         }
 
@@ -55,57 +54,17 @@ class BuscarUserActivity : AppCompatActivity() {
 
     private fun BuscarAmigos( nombreAmigo:String) {
 
-
-
-        /*var usuario= db.collection("Users").whereEqualTo("nombre",nombreAmigo).addSnapshotListener{value,error ->
-            val user = value!!.toObjects(Users::class.java)
-            user.forEachIndexed { index, user ->
-                user.uid = value.documents[index].id
-            }
-            Log.i("KSJ",user.toString())
-            Log.i("KSJ",user.size.toString())
-            enlace.listaUser.apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(this@BuscarUserActivity)
-                adapter =UserAdaptador(this@BuscarUserActivity,user)
-            }
-        }*/
         var usuario= db.collection("Users").orderBy("nombre").startAt(nombreAmigo).endAt(nombreAmigo + "\uf8ff").addSnapshotListener{value,error ->
             val user = value!!.toObjects(Users::class.java)
             user.forEachIndexed { index, user ->
                 user.uid = value.documents[index].id
             }
-            Log.i("KSJ",user.toString())
-            Log.i("KSJ",user.size.toString())
             enlace.listaUser.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(this@BuscarUserActivity)
                 adapter =UserAdaptador(this@BuscarUserActivity,user)
             }
         }
-
-
-
-        /*var buscarAmigosQuery= FirebaseDatabase.getInstance().getReference().child("User")
-            .child("nombre")
-            .startAt(nombreAmigo).endAt(nombreAmigo + "\uf8ff")*/
-
-        /*var buscarAmigoQuery = allUserDateBase.orderByChild("nombre")
-            .startAt(nombreAmigo).endAt(nombreAmigo+ "\uf8ff")
-
-        var firebaseRecyclerAdapter = object : FirebaseRecyclerAdapter<EncontrarAmigo,EncontrarAmigoHolder>(EncontrarAmigo::class.java,R.layout.usuarios_lista_layout,EncontrarAmigoHolder::class.java, buscarAmigoQuery){
-            override fun populateViewHolder(
-                viewHolder: EncontrarAmigoHolder?,
-                encontrarAmigo: EncontrarAmigo?,
-                p2: Int
-            ) {
-                viewHolder?.setNombre(encontrarAmigo!!.nombre)
-
-                //viewHolder?.setProfileimage(applicationContext,encontrarAmigo!!.imagen)
-            }
-
-        }
-        lista.adapter=firebaseRecyclerAdapter*/
 
         }
 

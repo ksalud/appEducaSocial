@@ -5,13 +5,12 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -76,24 +75,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         //ordenar por fecha
-        db.collection("posts").orderBy("date",
-            Query.Direction.DESCENDING).addSnapshotListener{ value, error ->
-            val posts = value!!.toObjects(Post::class.java)
-            //Problema al filtrar desordena los uid y fallan los likes
-            //posts.sortByDescending { it.date }
+        desFiltrar()
 
-            posts.forEachIndexed { index, post ->
-                post.uid = value.documents[index].id
-            }
 
-            enlace.rv.apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(this@MainActivity)
-                adapter = PostAdaptador(this@MainActivity,posts)
-            }
+    enlace.btnBuscar.setOnClickListener {
+        filtrarPorCategoria(enlace.buscarCategoriaTxt.text.toString())
+
+    }
+    enlace.buscarCategoriaTxt.addTextChangedListener {
+        if(it.isNullOrEmpty()){
+            desFiltrar()
         }
-
-
+    }
 
 
     enlace.btnAddPost.setOnClickListener {
@@ -115,13 +108,18 @@ class MainActivity : AppCompatActivity() {
                 autentificador.signOut()
                 finish()
             }
-            R.id.portadaFragment ->{
-
+            R.id.amigos_item ->{
+                irAVerAmigos()
             }
             R.id.buscar_item ->{
                 irABuscarAmigos()
             }
         }
+    }
+
+    private fun irAVerAmigos() {
+        val intent = Intent(this, AmigosActivity::class.java)
+        startActivity(intent)
     }
 
 
@@ -199,6 +197,45 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu,menu)
 
         return true
+    }
+
+    fun filtrarPorCategoria(categoria:String){
+        db.collection("posts").whereArrayContains("categorias",categoria).orderBy("date",
+            Query.Direction.DESCENDING).addSnapshotListener{ value, error ->
+            val posts = value?.toObjects(Post::class.java)
+            //Problema al filtrar desordena los uid y fallan los likes
+            //posts.sortByDescending { it.date }
+            if(!posts.isNullOrEmpty()){
+                posts.forEachIndexed { index, post ->
+                    post.uid = value.documents[index].id
+                }
+
+                enlace.rv.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(this@MainActivity)
+                    adapter = PostAdaptador(this@MainActivity,posts)
+                }
+            }
+
+        }
+    }
+    fun desFiltrar(){
+        db.collection("posts").orderBy("date",
+            Query.Direction.DESCENDING).addSnapshotListener{ value, error ->
+            val posts = value!!.toObjects(Post::class.java)
+            //Problema al filtrar desordena los uid y fallan los likes
+            //posts.sortByDescending { it.date }
+
+            posts.forEachIndexed { index, post ->
+                post.uid = value.documents[index].id
+            }
+
+            enlace.rv.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(this@MainActivity)
+                adapter = PostAdaptador(this@MainActivity,posts)
+            }
+        }
     }
 
 
